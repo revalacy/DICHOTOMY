@@ -13,17 +13,38 @@ const GoogleSpreadsheet = require('google-spreadsheet');
 var fn = require ('./../functions.js');
 var efn = require ('./../effects.js');
 
-exports.run = (client, message, [name, action]) => {//change args to whatever arg variables need to be defined up-front.
+exports.run = (client, message, [name, action, ...args]) => {//change args to whatever arg variables need to be defined up-front.
   
-  var room = message.channel.id;
-  
-  async function resolve(){
-   console.log(room);
-  }
-    
-//Get current stage, points, and min to compare
+ var announcementroom = client.channels.get('481931772540485648'); //the room where the event announcement will go when using /event label open; outside of testing this should be 503634158308818954
+  var registrationroom = client.channels.get('390953758944788482'); //this will be the room people are told to register in. It will be the bot room when the command goes live
 
   
-resolve();
+  async function resolve(){
+    var eventlabel = 'Test';
+    var npcstring = await fn.getproperty(7, eventlabel, 'npcs');
+    var npcs = npcstring.split(',');
+    npcs = npcs.filter(npc => npc != '');
+    var len = npcs.length;
+    console.log('len = ' + len);
+    console.log('Setting timeout functions');
+
+    
+
+    }
+
+  
+  async function messagehandler (a, b){
+  var msgarray = a;
+  var chnlid = b;
+  var timeoutstack = []
+  function doSetTimeout(i) {
+  setTimeout(function() { chnlid.send('```' + msgarray[i] + '```'); }, timeoutstack[i]);
+  }
+  for (var i = 0; i < msgarray.length; i++){
+   timeoutstack[i] = 5000 * i;
+   doSetTimeout(i);
+  }}
+  
+  resolve();
   
 }
