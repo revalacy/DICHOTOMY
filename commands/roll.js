@@ -1,20 +1,7 @@
 const async = require ('async');
-const GoogleSpreadsheet = require('google-spreadsheet');
-    const creds = require('./../client_secret.json');
-    const doc1 = new GoogleSpreadsheet('1kxcMdb0Gsyg9Oe3NbWMXx1vHopFjqLzneXehoURAN6M');//Character database
-    const doc2 = new GoogleSpreadsheet('16bWQdKPv4elUPb8UKqD3NP-Ve5TwHGjQWBdAhbkOBLI');//objects and sets database
-    const doc3 = new GoogleSpreadsheet('1fuXzJ1_rvlHIFRRwTZXfnDrxzyn2yrvukXe0Th_i8-8');//events database
-    doc1.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc2.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc3.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
+const fn = require ('./../functions.js');
+var efn = require ('./../effects.js');
 
-var fn = require ('./../functions.js');
 
 //Command flow: /roll Name stat (optional)bonus
 exports.run = (client, message, args) => {
@@ -42,14 +29,30 @@ exports.run = (client, message, args) => {
    if (!modifier) return message.channel.send('That stat doesn\'t exist, please use a valid stat!');
     var total = +roll + +modifier + +bonus;//total of roll, is often threshold
     if (total <= 1) fn.doom(name);
-    const [pt1, pt2, pt3] = await fn.getval(4, total, ["replace", "skillcheck","roll"]);
      var statcheck = await fn.getproperty(4, stat, "replace")
-     var msg = ('**'+ name + '** '+ pt1 + " " + pt2 + statcheck +pt3);
-     message.channel.send(msg)
-   
-     
+     var msg = await fn.getproperty(4, total, 'skillcheck');
+     msg = msg.replace('#', name).replace('#', statcheck).replace('#', name);
+     messagehandler([msg]);
  
  }
+  
+        async function messagehandler (a){
+        var msgarray = a;
+        var timeoutstack = []
+        var urlarray = [];
+        function doSetTimeout(i) {
+        setTimeout(function() { 
+          msgarray[i] = msgarray[i].replace('[','').replace(']','').replace('||','');
+          var n = msgarray[i].indexOf('|');
+          console.log('n = ' + n);
+          if (n != -1) {var [replacemsg, url] = msgarray[i].split('|'); console.log(url); msgarray[i] = replacemsg; console.log(msgarray[i] + ';' + url); message.channel.send(msgarray[i], {files: [url]});};
+          if (n === -1) message.channel.send(msgarray[i]);
+        }, timeoutstack[i]);
+        }
+        for (var i = 0; i < msgarray.length; i++){
+         timeoutstack[i] = 5000 * i;
+         doSetTimeout(i);
+        }}
  
   resolve();
 }

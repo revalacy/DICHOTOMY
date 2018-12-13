@@ -1,33 +1,33 @@
 {
-    "name": "dichotomy",
-    "version": "2.0.0",
-    "description": "A simple bot for roleplaying in the Glass Network.",
-    "main": "dichotomy.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node dichotomy.js"
-    },
-    "engines": {
-      "node": "8.4.0"
-    },
-    "author": "Enambris",
-    "dependencies": {
-      "async": "^2.6.1",
-      "common-tags": "^1.8.0",
-      "dice-expression-evaluator": "^0.1.2",
-      "discord.js": "^11.4.2",
-      "enmap": "^4.3.2",
-      "express": "^4.16.4",
-      "google-auth-library": "^2.0.0",
-      "google-spreadsheet": "^2.0.6",
-      "google-spreadsheets": "^2.0.0",
-      "lodash": "^4.17.11",
-      "moment": "^2.22.2",
-      "moment-duration-format": "^2.2.2",
-      "request": "^2.88.0",
-      "sqlite": "^3.0.0",
-      "universal-analytics": "^0.4.17",
-      "xml2js": "^0.4.19",
-      "yargs": "^12.0.2"
-    }
+  "name": "dichotomy",
+  "version": "2.0.0",
+  "description": "A simple bot for roleplaying in the Glass Network.",
+  "main": "dichotomy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dichotomy.js"
+  },
+  "engines": {
+    "node": "8.4.0"
+  },
+  "author": "Enambris",
+  "dependencies": {
+    "async": "^2.6.1",
+    "common-tags": "^1.8.0",
+    "dice-expression-evaluator": "^0.1.2",
+    "discord.js": "^11.4.2",
+    "enmap": "^4.3.2",
+    "express": "^4.16.4",
+    "google-auth-library": "^2.0.0",
+    "google-spreadsheet": "^2.0.6",
+    "google-spreadsheets": "^2.0.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
+    "moment-duration-format": "^2.2.2",
+    "request": "^2.88.0",
+    "sqlite": "^3.0.0",
+    "universal-analytics": "^0.4.17",
+    "xml2js": "^0.4.19",
+    "yargs": "^12.0.2"
   }
+}

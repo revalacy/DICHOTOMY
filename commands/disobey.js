@@ -1,20 +1,6 @@
 const async = require ('async');
-const GoogleSpreadsheet = require('google-spreadsheet');
-    const creds = require('./../client_secret.json');
-    const doc1 = new GoogleSpreadsheet('1kxcMdb0Gsyg9Oe3NbWMXx1vHopFjqLzneXehoURAN6M');//Character database
-    const doc2 = new GoogleSpreadsheet('16bWQdKPv4elUPb8UKqD3NP-Ve5TwHGjQWBdAhbkOBLI');//objects and sets database
-    const doc3 = new GoogleSpreadsheet('1fuXzJ1_rvlHIFRRwTZXfnDrxzyn2yrvukXe0Th_i8-8');//events database
-    doc1.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc2.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc3.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-
-var fn = require ('./../functions.js');
+const fn = require ('./../functions.js');
+var efn = require ('./../effects.js');
 
 //command flow: name, stat, target
 exports.run = (client, message, [name, ...actionlog]) => {
@@ -45,19 +31,25 @@ exports.run = (client, message, [name, ...actionlog]) => {
    //if total is less than 7, run random symptom pull
    var searchtotal = rolltotal.toString();
    //get message string
-   var [rollstring, disobeystring] = await fn.getval(4, searchtotal, ['replace','disobey']);
     if (+rolltotal < 7) {
        var randomsearch = Math.floor(Math.random()*30);
        var randomsymptom = await fn.getproperty(4, randomsearch,'punishrand');
-       disobeystring = (disobeystring + randomsymptom);
       if (acceptance === 'TRUE') {
         var randomsearchagain = Math.floor(Math.random()*30);
-        var randomsymptomagain = await fn.getproperty(4, randomsearch, 'punishrand');
-        disobeystring = (disobeystring + randomsymptomagain);
+        var randomsymptomagain = await fn.getproperty(4, randomsearchagain, 'punishrand');
+        randomsymptom = (randomsymptomagain + "** and **" + randomsymptom);
+      };
+      if (rolltotal === '1') {
+        var randomthirdsearch = Math.floor(Math.random()*30);
+        var randomsymptomthree = await fn.getproperty(4, randomthirdsearch, 'punishrand');
+        randomsymptom = (randomsymptomthree + ', ' + randomsymptom);
+        randomsymptom = randomsymptom.replace(randomsymptomagain, randomsymptomagain + ',');
       };
    };
-   var msg = (namestring + ' has attempted to disobey and ' + rollstring + disobeystring);
+   var msg = await fn.getproperty(4, searchtotal, 'disobey');
+   msg = msg.replace('#', name).replace('#', randomsymptom)
    message.channel.send(msg);//send message
+
    
    //if total is less than 5, message mom/dad
    if (+rolltotal < 5) {

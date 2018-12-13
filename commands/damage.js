@@ -1,15 +1,4 @@
 const async = require ('async');
-const GoogleSpreadsheet = require('google-spreadsheet');
-    const creds = require('./../client_secret.json');
-    const doc = new GoogleSpreadsheet('1kxcMdb0Gsyg9Oe3NbWMXx1vHopFjqLzneXehoURAN6M');//Character database
-    const eventdoc = new GoogleSpreadsheet('1fuXzJ1_rvlHIFRRwTZXfnDrxzyn2yrvukXe0Th_i8-8');//events database
-    doc.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    eventdoc.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-
 const fn = require ('./../functions.js');
 var efn = require ('./../effects.js');
 
@@ -29,13 +18,14 @@ var inventorykey = ('inventory');
 var index = 2;
 var namestring = ('**'+name+'**');
 var announcementroom = client.channels.get('503634158308818954');
+var cost = 5;
   
   var [type, objecthpmax, objecthp, hardness, objectowner, movealert, objectlocation, effects] = await fn.getval(9, object, ['type','maxhp','hp','hardness','objectowner','movealert','location','effects']);//get all object properties needed: type, maxhp, hp, hardness, objectowner, movealert, location, effects
   
   console.log(objuser);
   var [combatstat, userlocation, userinventory, atk, dmg, cooldowns] = await fn.getval(2, objuser, ['combatstat', 'location','inventory','atk','dmg','cooldowns']);//get user's properties: combatstat, location, inventory, atk, dmg
-  var stat = await fn.getproperty(2, objuser, combatstat);
-  var blockedmsg1 = ('That action is currently on cooldown for ' + namestring + ', please try again later. The cooldown for investigations is 20 minutes outside of events.');
+var stat = await fn.getproperty(2, objuser, combatstat);
+var blockedmsg1 = ('That action is currently on cooldown for ' + namestring + ', please try again later. The cooldown for investigations is 20 minutes outside of events.');
 var blockedmsg2 = (namestring + ' cannot use an action at this time. Either you have already acted, or the action window has ended. Please wait for the next action round or consult a GM.');
 var z;
 var blockmsg;

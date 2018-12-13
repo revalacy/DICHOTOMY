@@ -1,20 +1,6 @@
 const async = require ('async');
-const GoogleSpreadsheet = require('google-spreadsheet');
-    const creds = require('./../client_secret.json');
-    const doc1 = new GoogleSpreadsheet('1kxcMdb0Gsyg9Oe3NbWMXx1vHopFjqLzneXehoURAN6M');//Character database
-    const doc2 = new GoogleSpreadsheet('16bWQdKPv4elUPb8UKqD3NP-Ve5TwHGjQWBdAhbkOBLI');//objects and sets database
-    const doc3 = new GoogleSpreadsheet('1fuXzJ1_rvlHIFRRwTZXfnDrxzyn2yrvukXe0Th_i8-8');//events database
-    doc1.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc2.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-    doc3.useServiceAccountAuth(creds, function (err) {
-    if (err)
-    console.log(err)});
-
-var fn = require ('./../functions.js');
+const fn = require ('./../functions.js');
+var efn = require ('./../effects.js');
 
 //command flow: name, stat, target
 exports.run = (client, message, [name, location]) => {
@@ -25,7 +11,6 @@ exports.run = (client, message, [name, location]) => {
 async function resolve(){
 console.log('Starting location movement.'); 
 var cmdgen = ("move");
-var namestring = ('**' + name + '**');
   var namelist = (name + ',');
 var user = message.author.id;
 var owner = await fn.getproperty(2, name, 'userid');
@@ -34,7 +19,8 @@ if (owner != user) return message.channel.send('You can\'t use commands for some
     
     console.log('Collecting object properties.');
     //pull name's properties: inventory, location
-  var [inventory, currentlocation] = await fn.getval(2, name, ['inventory','location']);
+  var [inventory, currentlocation, keys, namestring] = await fn.getval(2, name, ['inventory','location', 'keys', 'friendlyname']);
+  inventory = inventory + keys;
     //pull location's properties: inventory, occupants, haslock, authorizedentry, knocking, description, friendlyname, activestate
   var [locationinventory, occupants, haslock, authorizedentry, knocking, description, friendlyname, activestate, locationhome] = await fn.getval(8,location, ['inventory','occupants','haslock','authorizedentry','knocking','description','friendlyname','activestate','location']);
     //if activestate is inactive return 'this location isn't currently active, please reach out to a GM if you have questions'
@@ -55,7 +41,7 @@ if (owner != user) return message.channel.send('You can\'t use commands for some
                     occupants = newlococcupants;
                     location = locationhome;
                     friendlyname = newlocname;
-                    msg = (namestring + ' does not have the key required to enter this location. Either you must find a key, or you will need to knock and hope the owner opens the door. ' + namestring + ' has entered ' + locationhome + ' instead.');
+                    msg = ('**' + namestring + '** does not have the key required to enter this location. Either you must find a key, or you will need to knock and hope the owner opens the door. ' + namestring + ' has entered ' + locationhome + ' instead.');
           
         };
       };
